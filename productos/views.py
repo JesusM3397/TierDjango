@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponse,HttpResponseForbidden
-from .models import Inventario, Solicitud
-from .forms import InventarioForm,PlasticPartsForm,ElectronicPartsForm
+from .models import Inventario, Solicitud,Envio
+from .forms import InventarioForm,PlasticPartsForm,ElectronicPartsForm,EnvioForm
 from django.contrib import messages
 import json
 import requests
@@ -155,4 +155,29 @@ def t2pc_sell(request):
 
 
 def log_ship(request):
-    return render(request, "logship.html")
+    message = None
+
+    if request.method == 'POST':
+        form = EnvioForm(request.POST)
+        if form.is_valid():
+            nuevo_envio = form.save()  # Guardar el formulario y obtener el objeto Envio
+            data = {
+                "origen": nuevo_envio.origen,
+                "destino": nuevo_envio.destino,
+                "fecha": nuevo_envio.fecha.strftime("%Y-%m-%d"),
+                "peso": nuevo_envio.peso,
+                # Agrega más campos según sea necesario
+            }
+            main_api_url = "http://localhost:8002/update-envios"
+            response = requests.post(main_api_url, json=data, headers={'Content-Type': 'application/json'})
+            if response.status_code == 200:
+                message = "Envío registrado exitosamente"
+            else:
+                message = "Error al enviar datos a FastAPI"
+        else:
+            message = "Formulario inválido"
+    else:
+        form = EnvioForm()
+
+    envios = Envio.objects.all()
+    return render(request, 'logship.html', {'form': form, 'envios': envios, 'message': message})
