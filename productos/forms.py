@@ -1,5 +1,5 @@
 from django import forms
-from .models import Inventario
+from .models import Inventario,Envio,Solicitud
 
 class InventarioForm(forms.ModelForm):
     class Meta:
@@ -25,3 +25,23 @@ class ElectronicPartsForm(forms.Form):
     battery = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
     microphone = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
     speakers = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
+class EnvioForm(forms.ModelForm):
+    solicitud = forms.ModelChoiceField(
+        queryset=Solicitud.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    origen = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    destino = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    fecha = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
+    peso = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 1}))
+
+    class Meta:
+        model = Envio
+        fields = ['solicitud', 'origen', 'destino', 'fecha', 'peso']
+
+    def __init__(self, *args, **kwargs):
+        super(EnvioForm, self).__init__(*args, **kwargs)
+        
+        # Excluir IDs de solicitudes ya existentes
+        solicitudes_exist = Envio.objects.values_list('solicitud__id', flat=True).distinct()
+        self.fields['solicitud'].queryset = Solicitud.objects.exclude(id__in=solicitudes_exist)
