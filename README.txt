@@ -1,6 +1,6 @@
 Para uzar app: 
  Crear entorno virutal 
- Python -m ven ven 
+ Python -m venv venv 
  Ejecutar el entorno virutal 
  ./venv/Scripts/activate
  Ejecutar pip install 
