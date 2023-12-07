@@ -7,7 +7,7 @@ import json
 import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F
-
+import traceback
 
 def index(request):
     return render(request, "index.html")
@@ -173,7 +173,8 @@ def client_ship(request):
 
 
 def get_exchange_rates(base_currency):
-    api_key = "b6e563dc2f7b076896414eff4f6cb603"  # Reemplaza con tu clave de API de ExchangeRate-API
+    print(f"Obteniendo tasas de cambio para {base_currency}")
+    api_key = "b6e563dc2f7b076896414eff4f6cb603"  
     url = f"https://open.er-api.com/v6/latest/{base_currency}?apikey={api_key}"
 
     try:
@@ -199,36 +200,44 @@ def client_sell(request, currency="USD"):
     solicitudes = Solicitud.objects.all()
 
     # Obtener tasas de cambio en vivo desde la API
-    exchange_rates = get_exchange_rates("USD")
+    exchange_rates = get_exchange_rates(currency)  # Utiliza la moneda seleccionada
 
     # Obtener la tasa de cambio específica para la moneda seleccionada
     conversion_rate = exchange_rates.get(currency, 1.0)
+    
+    # Calcular el total y multiplicarlo por 1000
+    total_sum = sum(
+        solicitud.carcasa_color_azul +
+        solicitud.carcasa_color_verde +
+        solicitud.carcasa_color_amarillo +
+        solicitud.carcasa_color_morado +
+        solicitud.carcasa_color_rosa +
+        solicitud.carcasa_color_cyan
+        for solicitud in solicitudes
+    ) * 1000
 
-    # Calcular el total en la moneda seleccionada
-    total_sum = (
-        sum(
-            (
-                solicitud.carcasa_color_azul
-                + solicitud.carcasa_color_verde
-                + solicitud.carcasa_color_amarillo
-                + solicitud.carcasa_color_morado
-                + solicitud.carcasa_color_rosa
-                + solicitud.carcasa_color_cyan
-            )
-            * conversion_rate
-            for solicitud in solicitudes
-        )
-        * 1000
-    )
+    # Multiplicar el total por las tasas de cambio
+    total_in_selected_currency = total_sum * conversion_rate  # Total en la moneda seleccionada
 
-    formatted_total = f"{currency} {total_sum:,.2f}"
+    # Calcular el total en otras monedas
+    total_in_usd = total_sum * exchange_rates["USD"]
+    total_in_eur = total_sum * exchange_rates["EUR"]
+    total_in_mxn = total_sum * exchange_rates["MXN"]
+    # Agrega más monedas según sea necesario
+
     context = {
         "datos": solicitudes,
-        "total_sum": formatted_total,
+        "total_sum": total_sum,
+        "total_in_selected_currency": total_in_selected_currency,
+        "total_in_usd": total_in_usd,
+        "total_in_eur": total_in_eur,
+        "total_in_mxn": total_in_mxn,
         "selected_currency": currency,
         "exchange_rates": exchange_rates,
     }
     return render(request, "clientsell.html", context)
+
+
 
 
 def t2pe_sell(request):

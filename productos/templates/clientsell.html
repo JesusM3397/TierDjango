@@ -140,10 +140,22 @@
                 </table>
             </div>
         
-            <h1>Total: {{ total_sum }}</h1>
+            <h1>Total: {{ total_sum }}$</h1>
         {% endblock %}
+        <p>Ganancias en diferntes moendas</p>
+        <ul>
+            <li>Total en {{ selected_currency }}: {{ total_in_selected_currency | floatformat:2 }}$</li>
+            <li>Total en EUR: {{ total_in_eur | floatformat:2 }}$</li>
+            <li>Total en MXN: {{ total_in_mxn | floatformat:2 }}$</li>
+        </ul>
+        <p>Tasas de cambio:</p>
+        <ul>
+            <li>USD: {{ exchange_rates.USD }}$</li>
+            <li>EUR: {{ exchange_rates.EUR }}$</li>
+            <li>MXN: {{ exchange_rates.MXN }}$</li>
+        </ul>
         
-
+        
 </body>
 
 </html>
