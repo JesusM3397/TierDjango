@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F
 import traceback
 
+
 def index(request):
     return render(request, "index.html")
 
@@ -174,7 +175,7 @@ def client_ship(request):
 
 def get_exchange_rates(base_currency):
     print(f"Obteniendo tasas de cambio para {base_currency}")
-    api_key = "b6e563dc2f7b076896414eff4f6cb603"  
+    api_key = "b6e563dc2f7b076896414eff4f6cb603"
     url = f"https://open.er-api.com/v6/latest/{base_currency}?apikey={api_key}"
 
     try:
@@ -204,20 +205,25 @@ def client_sell(request, currency="USD"):
 
     # Obtener la tasa de cambio específica para la moneda seleccionada
     conversion_rate = exchange_rates.get(currency, 1.0)
-    
+
     # Calcular el total y multiplicarlo por 1000
-    total_sum = sum(
-        solicitud.carcasa_color_azul +
-        solicitud.carcasa_color_verde +
-        solicitud.carcasa_color_amarillo +
-        solicitud.carcasa_color_morado +
-        solicitud.carcasa_color_rosa +
-        solicitud.carcasa_color_cyan
-        for solicitud in solicitudes
-    ) * 1000
+    total_sum = (
+        sum(
+            solicitud.carcasa_color_azul
+            + solicitud.carcasa_color_verde
+            + solicitud.carcasa_color_amarillo
+            + solicitud.carcasa_color_morado
+            + solicitud.carcasa_color_rosa
+            + solicitud.carcasa_color_cyan
+            for solicitud in solicitudes
+        )
+        * 1000
+    )
 
     # Multiplicar el total por las tasas de cambio
-    total_in_selected_currency = total_sum * conversion_rate  # Total en la moneda seleccionada
+    total_in_selected_currency = (
+        total_sum * conversion_rate
+    )  # Total en la moneda seleccionada
 
     # Calcular el total en otras monedas
     total_in_usd = total_sum * exchange_rates["USD"]
@@ -236,8 +242,6 @@ def client_sell(request, currency="USD"):
         "exchange_rates": exchange_rates,
     }
     return render(request, "clientsell.html", context)
-
-
 
 
 def t2pe_sell(request):
@@ -397,3 +401,7 @@ def log_ship(request):
     return render(
         request, "logship.html", {"form": form, "envios": envios, "message": message}
     )
+
+
+def entryexit(request):
+    return render(request, "entry.html")

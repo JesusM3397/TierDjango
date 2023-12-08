@@ -23,80 +23,86 @@
   <div id="wrapper">
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-          <div class="sidebar-brand-icon rotate-n-15">
-              <i class="fas fa-mobile"></i>
-          </div>
-          <div class="sidebar-brand-text mx-3">Tier 1: Proveedor de Equipos</div>
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-mobile"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Tier 1: Proveedor de Equipos</div>
       </a>
       <!--************************************************************************************-->
       <hr class="sidebar-divider my-0">
       <li class="nav-item active">
-          <a class="nav-link" href="/">
-              <i class="fas fa-fw fa-home"></i>
-              <span>Inicio</span></a>
+        <a class="nav-link" href="/">
+          <i class="fas fa-fw fa-home"></i>
+          <span>Inicio</span></a>
       </li>
       <li class="nav-item">
-          <a class="nav-link collapsed" href="/warehouse">
-              <i class="fas fa-fw fa-warehouse"></i>
-              <span>Inventario</span>
-          </a>
+        <a class="nav-link collapsed" href="/warehouse">
+          <i class="fas fa-fw fa-warehouse"></i>
+          <span>Inventario</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="/entryexit">
+          <i class="fa-solid fa-door-open"></i>
+          <span>Entradas y Salidas</span>
+        </a>
       </li>
       <!-- Divider -->
       <hr class="sidebar-divider">
       <!-- Heading -->
       <div class="sidebar-heading">
-          Clientes
+        Clientes
       </div>
       <!-- *********************************************************************************************  -->
       <li class="nav-item">
-          <a class="nav-link collapsed" href="/clientrequest">
-              <i class="fas fa-fw fa-folder"></i>
-              <span>Solicitudes</span>
-          </a>
+        <a class="nav-link collapsed" href="/clientrequest">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Solicitudes</span>
+        </a>
       </li>
-      
+
       <li class="nav-item">
-          <a class="nav-link collapsed" href="/clientsell">
-              <i class="fas fa-fw fa-dollar-sign"></i>
-              <span>Ventas</span>
-          </a>
+        <a class="nav-link collapsed" href="/clientsell">
+          <i class="fas fa-fw fa-dollar-sign"></i>
+          <span>Ventas</span>
+        </a>
       </li>
 
       <div class="sidebar-heading">
-          Tier 2: Provedor de piezas Electronicas
+        Tier 2: Provedor de piezas Electronicas
       </div>
-      
+
       <li class="nav-item">
-          <a class="nav-link collapsed" href="/t2pesell">
-              <i class="fas fa-fw fa-store"></i>
-              <span>Compras</span>
-          </a>
+        <a class="nav-link collapsed" href="/t2pesell">
+          <i class="fas fa-fw fa-store"></i>
+          <span>Compras</span>
+        </a>
       </li>
       <div class="sidebar-heading">
-          Tier 2: Provedor de piezas plasticas cosmeticas
+        Tier 2: Provedor de piezas plasticas cosmeticas
       </div>
-      
+
       <li class="nav-item">
-          <a class="nav-link collapsed" href="/t2pcsell">
-              <i class="fas fa-fw fa-store"></i>
-              <span>Compras</span>
-          </a>
+        <a class="nav-link collapsed" href="/t2pcsell">
+          <i class="fas fa-fw fa-store"></i>
+          <span>Compras</span>
+        </a>
       </li>
       <div class="sidebar-heading">
-          Logistica
+        Logistica
       </div>
       <li class="nav-item">
-          <a class="nav-link collapsed" href="/logship">
-              <i class="fas fa-fw fa-truck"></i>
-              <span>Envios</span>
-          </a>
+        <a class="nav-link collapsed" href="/logship">
+          <i class="fas fa-fw fa-truck"></i>
+          <span>Envios</span>
+        </a>
       </li>
 
       <!-- *********************************************************************************************  -->
 
-      
+
       <hr class="sidebar-divider">
-  </ul>
+    </ul>
     {% block content %}
     <div id="content-wrapper" class="d-flex flex-column">
       <!-- Main Content -->
@@ -108,48 +114,81 @@
             <div class="card-body">
               <form method="post" class="post-form">
                 {% csrf_token %}
+
                 <div class="form-group row">
                   <label for="{{ form.nombre.id_for_label }}" class="col-sm-2 col-form-label">Nombre:</label>
                   <div class="col-sm-10">
                     {{ form.nombre }}
                   </div>
                 </div>
+
                 <div class="form-group row">
                   <label for="{{ form.descripcion.id_for_label }}" class="col-sm-2 col-form-label">Descripción:</label>
                   <div class="col-sm-10">
                     {{ form.descripcion }}
                   </div>
                 </div>
+
                 <div class="form-group row">
-                  <label for="{{ form.stock.id_for_label }}" class="col-sm-2 col-form-label">Stock:</label>
+                  <label for="{{ form.stockl.id_for_label }}" class="col-sm-2 col-form-label">Stock Izquierdo:</label>
                   <div class="col-sm-10">
-                    <input type="number" name="{{ form.stock.name }}" value="{{ form.stock.value }}" min="0" title="Debe ser un número mayor o igual a 0" required>
+                    {{ form.stockl }}
                   </div>
                 </div>
+
                 <div class="form-group row">
-                  <label for="{{ form.cantidad_maxima.id_for_label }}" class="col-sm-2 col-form-label">Cantidad Máxima:</label>
+                  <label for="{{ form.stockr.id_for_label }}" class="col-sm-2 col-form-label">Stock Derecho:</label>
                   <div class="col-sm-10">
-                    <input type="number" name="{{ form.cantidad_maxima.name }}" value="{{ form.cantidad_maxima.value }}" min="200" max="100000" title="Debe ser un número entre 200 y 100000" required>
+                    {{ form.stockr }}
                   </div>
                 </div>
+
                 <div class="form-group row">
-                  <label for="{{ form.cantidad_minima.id_for_label }}" class="col-sm-2 col-form-label">Cantidad Mínima:</label>
+                  <label for="{{ form.cantidad_maxima.id_for_label }}" class="col-sm-2 col-form-label">Cantidad
+                    Máxima:</label>
                   <div class="col-sm-10">
-                    <input type="number" name="{{ form.cantidad_minima.name }}" value="{{ form.cantidad_minima.value }}" min="200" title="Debe ser un número arriba de 200" required>
+                    {{ form.cantidad_maxima }}
                   </div>
                 </div>
+
                 <div class="form-group row">
-                  <label for="{{ form.venta_maxima.id_for_label }}" class="col-sm-2 col-form-label">Venta Máxima:</label>
+                  <label for="{{ form.cantidad_minima.id_for_label }}" class="col-sm-2 col-form-label">Cantidad
+                    Mínima:</label>
                   <div class="col-sm-10">
-                    <input type="number" name="{{ form.venta_maxima.name }}" value="{{ form.venta_maxima.value }}" min="200" max="100000" title="Debe ser un número entre 100 y 100000" required>
+                    {{ form.cantidad_minima }}
                   </div>
                 </div>
+
                 <div class="form-group row">
-                  <label for="{{ form.venta_minima.id_for_label }}" class="col-sm-2 col-form-label">Venta Mínima:</label>
+                  <label for="{{ form.venta_maxima.id_for_label }}" class="col-sm-2 col-form-label">Venta
+                    Máxima:</label>
                   <div class="col-sm-10">
-                    <input type="number" name="{{ form.venta_minima.name }}" value="{{ form.venta_minima.value }}" min="200" title="Debe ser un número arriba de 200" required>
+                    {{ form.venta_maxima }}
                   </div>
                 </div>
+
+                <div class="form-group row">
+                  <label for="{{ form.venta_minima.id_for_label }}" class="col-sm-2 col-form-label">Venta
+                    Mínima:</label>
+                  <div class="col-sm-10">
+                    {{ form.venta_minima }}
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="{{ form.BoM.id_for_label }}" class="col-sm-2 col-form-label">BoM:</label>
+                  <div class="col-sm-10">
+                    {{ form.BoM }}
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="{{ form.status.id_for_label }}" class="col-sm-2 col-form-label">Estado:</label>
+                  <div class="col-sm-10">
+                    {{ form.status }}
+                  </div>
+                </div>
+
                 <div class="form-group row">
                   <div class="col-sm-10 offset-sm-2">
                     <button type="submit" class="btn btn-primary">Guardar cambios</button>
@@ -165,4 +204,3 @@
       <!-- End of Main Content -->
     </div>
     {% endblock %}
-    

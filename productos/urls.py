@@ -12,5 +12,5 @@ urlpatterns = [
     path('logship/', views.log_ship, name='log_ship'),
     path('delete-material/<int:material_id>/', views.delete_material, name='delete-material'),
     path('editar-material/<int:material_id>/', views.editar_material, name='editar-material'),
-
+    path('entryexit/', views.entryexit, name='entryexit'),
 ]
