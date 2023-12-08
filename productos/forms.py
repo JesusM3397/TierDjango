@@ -1,30 +1,40 @@
 from django import forms
-from .models import Inventario,Envio,Solicitud
+from .models import Inventario,Envio,Solicitud,PlasticParts,ElectronicParts
 
 class InventarioForm(forms.ModelForm):
     class Meta:
         model = Inventario
         fields = ['nombre', 'descripcion',  'stockl', 'stockr', 'cantidad_maxima', 'cantidad_minima', 'venta_maxima', 'venta_minima', 'BoM', 'status']
-class PlasticPartsForm(forms.Form):
-    carcasa_color_azul = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    carcasa_color_verde = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    carcasa_color_amarillo = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    carcasa_color_morado = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    carcasa_color_rosa = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    carcasa_color_cyan = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
+class PlasticPartsForm(forms.ModelForm):
+    class Meta:
+        model = PlasticParts
+        fields = '__all__'
+        widgets = {
+            'carcasa_color_azul': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'carcasa_color_verde': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'carcasa_color_amarillo': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'carcasa_color_morado': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'carcasa_color_rosa': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'carcasa_color_cyan': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+        }
 
-class ElectronicPartsForm(forms.Form):
-    cameras = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    biometric_sensors = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    baseband = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    power_management = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    processor = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    nand = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    dram = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    accelerometer = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    battery = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    microphone = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
-    speakers = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
+class ElectronicPartsForm(forms.ModelForm):
+    class Meta:
+        model = ElectronicParts
+        fields = '__all__'
+        widgets = {
+            'cameras': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'biometric_sensors': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'baseband': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'power_management': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'processor': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'nand': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'dram': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'accelerometer': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'battery': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'microphone': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+            'speakers': forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}),
+        }
 class EnvioForm(forms.ModelForm):
     solicitud = forms.ModelChoiceField(
         queryset=Solicitud.objects.all(),

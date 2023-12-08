@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden
-from .models import Inventario, Solicitud, Envio
+from .models import Inventario, Solicitud, Envio, PlasticParts, ElectronicParts
 from .forms import InventarioForm, PlasticPartsForm, ElectronicPartsForm, EnvioForm
 from django.contrib import messages
 import json
@@ -199,8 +199,6 @@ def get_exchange_rates(base_currency):
 
 def client_sell(request, currency="USD"):
     solicitudes = Solicitud.objects.all()
-
-    # Obtener tasas de cambio en vivo desde la API
     exchange_rates = get_exchange_rates(currency)  # Utiliza la moneda seleccionada
 
     # Obtener la tasa de cambio específica para la moneda seleccionada
@@ -251,45 +249,21 @@ def t2pe_sell(request):
         form = ElectronicPartsForm(request.POST)
 
         if form.is_valid():
-            # Obtener los datos del formulario
-            cameras = form.cleaned_data["cameras"]
-            biometric_sensors = form.cleaned_data["biometric_sensors"]
-            baseband = form.cleaned_data["baseband"]
-            power_management = form.cleaned_data["power_management"]
-            processor = form.cleaned_data["processor"]
-            nand = form.cleaned_data["nand"]
-            dram = form.cleaned_data["dram"]
-            accelerometer = form.cleaned_data["accelerometer"]
-            battery = form.cleaned_data["battery"]
-            microphone = form.cleaned_data["microphone"]
-            speakers = form.cleaned_data["speakers"]
-
-            # Actualizar registros en Inventario para IDs del 1 al 11
-            Inventario.objects.filter(id=1).update(stock=F("stock") + cameras)
-            Inventario.objects.filter(id=2).update(stock=F("stock") + biometric_sensors)
-            Inventario.objects.filter(id=3).update(stock=F("stock") + baseband)
-            Inventario.objects.filter(id=4).update(stock=F("stock") + power_management)
-            Inventario.objects.filter(id=5).update(stock=F("stock") + processor)
-            Inventario.objects.filter(id=6).update(stock=F("stock") + nand)
-            Inventario.objects.filter(id=7).update(stock=F("stock") + dram)
-            Inventario.objects.filter(id=8).update(stock=F("stock") + accelerometer)
-            Inventario.objects.filter(id=9).update(stock=F("stock") + battery)
-            Inventario.objects.filter(id=10).update(stock=F("stock") + microphone)
-            Inventario.objects.filter(id=11).update(stock=F("stock") + speakers)
+            electronic_parts = form.save()
 
             # Datos para enviar a FastAPI
             data = {
-                "cameras": cameras,
-                "biometric_sensors": biometric_sensors,
-                "baseband": baseband,
-                "power_management": power_management,
-                "processor": processor,
-                "nand": nand,
-                "dram": dram,
-                "accelerometer": accelerometer,
-                "battery": battery,
-                "microphone": microphone,
-                "speakers": speakers,
+                "cameras": electronic_parts.cameras,
+                "biometric_sensors": electronic_parts.biometric_sensors,
+                "baseband": electronic_parts.baseband,
+                "power_management": electronic_parts.power_management,
+                "processor": electronic_parts.processor,
+                "nand": electronic_parts.nand,
+                "dram": electronic_parts.dram,
+                "accelerometer": electronic_parts.accelerometer,
+                "battery": electronic_parts.battery,
+                "microphone": electronic_parts.microphone,
+                "speakers": electronic_parts.speakers,
             }
 
             # Enviar datos a FastAPI
@@ -305,7 +279,7 @@ def t2pe_sell(request):
     else:
         form = ElectronicPartsForm()
 
-    return render(request, "t2pcsell.html", {"form": form, "message": message})
+    return render(request, "t2pesell.html", {"form": form, "message": message})
 
 
 def t2pc_sell(request):
@@ -315,46 +289,16 @@ def t2pc_sell(request):
         form = PlasticPartsForm(request.POST)
 
         if form.is_valid():
-            # Obtener los datos del formulario
-            carcasa_color_azul = form.cleaned_data["carcasa_color_azul"]
-            carcasa_color_verde = form.cleaned_data["carcasa_color_verde"]
-            carcasa_color_amarillo = form.cleaned_data["carcasa_color_amarillo"]
-            carcasa_color_morado = form.cleaned_data["carcasa_color_morado"]
-            carcasa_color_rosa = form.cleaned_data["carcasa_color_rosa"]
-            carcasa_color_cyan = form.cleaned_data["carcasa_color_cyan"]
-
-            # Actualizar registros en Inventario para IDs del 12 al 17
-            Inventario.objects.filter(id=12).update(
-                stock=F("stock") + carcasa_color_azul
-            )
-            Inventario.objects.filter(id=13).update(
-                stock=F("stock") + carcasa_color_verde
-            )
-            Inventario.objects.filter(id=14).update(
-                stock=F("stock") + carcasa_color_amarillo
-            )
-            Inventario.objects.filter(id=15).update(
-                stock=F("stock") + carcasa_color_morado
-            )
-            Inventario.objects.filter(id=16).update(
-                stock=F("stock") + carcasa_color_rosa
-            )
-            Inventario.objects.filter(id=17).update(
-                stock=F("stock") + carcasa_color_cyan
-            )
-
-            # Datos para enviar a FastAPI
+            plastic_parts_data = form.save()
             data = {
-                "carcasa_color_azul": carcasa_color_azul,
-                "carcasa_color_verde": carcasa_color_verde,
-                "carcasa_color_amarillo": carcasa_color_amarillo,
-                "carcasa_color_morado": carcasa_color_morado,
-                "carcasa_color_rosa": carcasa_color_rosa,
-                "carcasa_color_cyan": carcasa_color_cyan,
-                # Agrega más campos según sea necesario
+                "carcasa_color_azul": plastic_parts_data.carcasa_color_azul,
+                "carcasa_color_verde": plastic_parts_data.carcasa_color_verde,
+                "carcasa_color_amarillo": plastic_parts_data.carcasa_color_amarillo,
+                "carcasa_color_morado": plastic_parts_data.carcasa_color_morado,
+                "carcasa_color_rosa": plastic_parts_data.carcasa_color_rosa,
+                "carcasa_color_cyan": plastic_parts_data.carcasa_color_cyan,
             }
 
-            # Enviar datos a FastAPI
             main_api_url = "http://localhost:8002/update-plastic-parts"
             response = requests.post(main_api_url, json=data)
 
@@ -404,4 +348,60 @@ def log_ship(request):
 
 
 def entryexit(request):
-    return render(request, "entry.html")
+    solicitudes = Solicitud.objects.all()
+    total_solicitudes = sum(
+        [
+            solicitud.carcasa_color_azul
+            + solicitud.carcasa_color_verde
+            + solicitud.carcasa_color_amarillo
+            + solicitud.carcasa_color_morado
+            + solicitud.carcasa_color_rosa
+            + solicitud.carcasa_color_cyan
+            for solicitud in solicitudes
+        ]
+    )
+    plastic_parts_data = PlasticParts.objects.last()
+    electronic_parts_data = ElectronicParts.objects.last()
+    total_plastic_parts = (
+        (
+            plastic_parts_data.carcasa_color_azul
+            + plastic_parts_data.carcasa_color_verde
+            + plastic_parts_data.carcasa_color_amarillo
+            + plastic_parts_data.carcasa_color_morado
+            + plastic_parts_data.carcasa_color_rosa
+            + plastic_parts_data.carcasa_color_cyan
+        )
+        if plastic_parts_data
+        else 0
+    )
+
+    total_electronic_parts = (
+        (
+            electronic_parts_data.cameras
+            + electronic_parts_data.biometric_sensors
+            + electronic_parts_data.baseband
+            + electronic_parts_data.power_management
+            + electronic_parts_data.processor
+            + electronic_parts_data.nand
+            + electronic_parts_data.dram
+            + electronic_parts_data.accelerometer
+            + electronic_parts_data.battery
+            + electronic_parts_data.microphone
+            + electronic_parts_data.speakers
+        )
+        if electronic_parts_data
+        else 0
+    )
+
+    return render(
+        request,
+        "entry.html",
+        {
+            "solicitudes": solicitudes,
+            "total_solicitudes": total_solicitudes,
+            "plastic_parts": PlasticParts.objects.all(),  # Obtén todos los registros de PlasticParts
+            "electronic_parts": ElectronicParts.objects.all(),  # Obtén todos los registros de ElectronicParts
+            "total_plastic_parts": total_plastic_parts,
+            "total_electronic_parts": total_electronic_parts,
+        },
+    )

@@ -41,3 +41,23 @@ class Envio(models.Model):
 
     def __str__(self):
         return f"Envío de {self.origen} a {self.destino} con fecha {self.fecha} y peso {self.peso} kg"
+class PlasticParts(models.Model):
+    carcasa_color_azul = models.IntegerField(default=0)
+    carcasa_color_verde = models.IntegerField(default=0)
+    carcasa_color_amarillo = models.IntegerField(default=0)
+    carcasa_color_morado = models.IntegerField(default=0)
+    carcasa_color_rosa = models.IntegerField(default=0)
+    carcasa_color_cyan = models.IntegerField(default=0)
+
+class ElectronicParts(models.Model):
+    cameras = models.IntegerField(default=0)
+    biometric_sensors = models.IntegerField(default=0)
+    baseband = models.IntegerField(default=0)
+    power_management = models.IntegerField(default=0)
+    processor = models.IntegerField(default=0)
+    nand = models.IntegerField(default=0)
+    dram = models.IntegerField(default=0)
+    accelerometer = models.IntegerField(default=0)
+    battery = models.IntegerField(default=0)
+    microphone = models.IntegerField(default=0)
+    speakers = models.IntegerField(default=0)

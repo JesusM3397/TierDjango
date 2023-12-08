@@ -44,10 +44,10 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="/entryexit">
-                  <i class="fa-solid fa-door-open"></i>
-                  <span>Entradas y Salidas</span>
+                    <i class="fa-solid fa-door-open"></i>
+                    <span>Entradas y Salidas</span>
                 </a>
-              </li>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider">
             <!-- Heading -->
@@ -107,7 +107,7 @@
         <div id="content-wrapper" class="d-flex flex-column">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Inventario</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Salidas de IPhones Terminados</h6>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -115,78 +115,131 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Stock</th>
-                                    <th>Stockl</th>
-                                    <th>Stockr</th>
-                                    <th>Cantidad Máxima</th>
-                                    <th>Cantidad Mínima</th>
-                                    <th>Venta Máxima</th>
-                                    <th>Venta Mínima</th>
-                                    <th>BoM</th>
-                                    <th>Status</th>
-                                    <th>Acciones</th>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <form method="post" action="{% url 'warehouse' %}">
-                                        {% csrf_token %}
-                                        <td><input type="text" name="nombre" required></td>
-                                        <td><input type="text" name="descripcion" required></td>
-                                        <td><input type="number" name="stock" min="0" title="Debe ser un número mayor o igual a 0" required></td>
-                                        <td><input type="number" name="stockl" required></td>
-                                        <td><input type="number" name="stockr" required></td>
-                                        <td><input type="number" name="cantidad_maxima" min="200" max="100000" title="Debe ser un número entre 200 y 100000" required></td>
-                                        <td><input type="number" name="cantidad_minima" min="200" title="Debe ser un número arriba de 200" required></td>
-                                        <td><input type="number" name="venta_maxima" min="200" max="100000" title="Debe ser un número entre 100 y 100000" required></td>
-                                        <td><input type="number" name="venta_minima" min="200" m title="Debe ser un número arriba de 200" required></td>
-                                        <td><input type="number" name="BoM" required></td>
-                                        <td>
-                                            <select name="status" required>
-                                                <option value="1">Entregado</option>
-                                                <option value="2">En Transito</option>
-                                            </select>
-                                        </td>
-                                        <td><button type="submit" class="btn btn-primary btn-sm">Agregar</button></td>
-                                    </form>
+                                    <th>Azul</th>
+                                    <th>Verde</th>
+                                    <th>Amarillo</th>
+                                    <th>Morado</th>
+                                    <th>Rosa</th>
+                                    <th>Cyan</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in inventario %}
-                                    <tr>
-                                        <td>{{ item.id }}</td>
-                                        <td>{{ item.nombre }}</td>
-                                        <td>{{ item.descripcion }}</td>
-                                        <td>{{ item.stock }}</td>
-                                        <td>{{ item.stockl }}</td>
-                                        <td>{{ item.stockr }}</td>
-                                        <td>{{ item.cantidad_maxima }}</td>
-                                        <td>{{ item.cantidad_minima }}</td>
-                                        <td>{{ item.venta_maxima }}</td>
-                                        <td>{{ item.venta_minima }}</td>
-                                        <td>{{ item.BoM }}</td>
-                                        <td>{{ item.get_status_display }}</td>
-                                        <td>
-                                            <form method="post" action="{% url 'editar-material' item.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-warning btn-sm">Editar</button>
-                                            </form>
-                                            <form method="post" action="{% url 'delete-material' item.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                {% for solicitud in solicitudes %}
+                                <tr>
+                                    <td>{{ solicitud.id }}</td>
+                                    <td>{{ solicitud.carcasa_color_azul }}</td>
+                                    <td>{{ solicitud.carcasa_color_verde }}</td>
+                                    <td>{{ solicitud.carcasa_color_amarillo }}</td>
+                                    <td>{{ solicitud.carcasa_color_morado }}</td>
+                                    <td>{{ solicitud.carcasa_color_rosa }}</td>
+                                    <td>{{ solicitud.carcasa_color_cyan }}</td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total</th>
+                                    <th colspan="6"></th>
+                                    <th>{{ total_solicitudes }}</th>
+                                </tr>
+                            </tfoot>
                         </table>
-                        
-
                     </div>
                 </div>
+
+                <!-- Partes Plásticas -->
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Entrada de Materia Prima - Partes Plásticas</h6>
+                </div>
+                <!-- Partes Plásticas -->
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTablePlastic" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Azul</th>
+                                <th>Verde</th>
+                                <th>Amarillo</th>
+                                <th>Morado</th>
+                                <th>Rosa</th>
+                                <th>Cyan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for plastic_part in plastic_parts %}
+                            <tr>
+                                <td>{{ plastic_part.id }}</td>
+                                <td>{{ plastic_part.carcasa_color_azul }}</td>
+                                <td>{{ plastic_part.carcasa_color_verde }}</td>
+                                <td>{{ plastic_part.carcasa_color_amarillo }}</td>
+                                <td>{{ plastic_part.carcasa_color_morado }}</td>
+                                <td>{{ plastic_part.carcasa_color_rosa }}</td>
+                                <td>{{ plastic_part.carcasa_color_cyan }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Total:</th>
+                                <th colspan="6"></th>
+                                <th>{{ total_plastic_parts }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Partes Electrónicas -->
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTableElectronic" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Cameras</th>
+                                <th>Biometric Sensors</th>
+                                <th>Baseband</th>
+                                <th>Power Management</th>
+                                <th>Processor</th>
+                                <th>NAND</th>
+                                <th>DRAM</th>
+                                <th>Accelerometer</th>
+                                <th>Battery</th>
+                                <th>Microphone</th>
+                                <th>Speakers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for electronic_part in electronic_parts %}
+                            <tr>
+                                <td>{{ electronic_part.id }}</td>
+                                <td>{{ electronic_part.cameras }}</td>
+                                <td>{{ electronic_part.biometric_sensors }}</td>
+                                <td>{{ electronic_part.baseband }}</td>
+                                <td>{{ electronic_part.power_management }}</td>
+                                <td>{{ electronic_part.processor }}</td>
+                                <td>{{ electronic_part.nand }}</td>
+                                <td>{{ electronic_part.dram }}</td>
+                                <td>{{ electronic_part.accelerometer }}</td>
+                                <td>{{ electronic_part.battery }}</td>
+                                <td>{{ electronic_part.microphone }}</td>
+                                <td>{{ electronic_part.speakers }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Total:</th>
+                                <th colspan="6"></th>
+                                <th>{{ total_electronic_parts }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+
             </div>
         </div>
+    </div>
+    </div>
     </div>
 </body>
 
