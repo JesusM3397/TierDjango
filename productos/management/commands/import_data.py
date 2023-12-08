@@ -23,6 +23,12 @@ class Command(BaseCommand):
             ('Carcasa Morado', 'Carcasa color Morado', 150, 180, 60, 150, 10, 8, 9, 10, 2),
             ('Carcasa Rosa', 'Carcasa color Rosa', 150, 180, 60, 150, 10, 9, 10, 1, 1),
             ('Carcasa Cyan', 'Carcasa color Cyan', 150, 180, 60, 150, 10, 10, 1, 2, 2),
+            ('iPhone  Azul', 'iPhone 15 Azul', 150, 180, 60, 150, 10, 5, 6, 7, 1),
+            ('iPhone  Verde', 'iPhone 15 Verde', 150, 180, 60, 150, 10, 6, 7, 8, 2),
+            ('iPhone  Amarillo', 'iPhone 15 Amarillo', 150, 180, 60, 150, 10, 7, 8, 9, 1),
+            ('iPhone  Morado', 'iPhone 15 Morado', 150, 180, 60, 150, 10, 8, 9, 10, 2),
+            ('iPhone  Rosa', 'iPhone 15 Rosa', 150, 180, 60, 150, 10, 9, 10, 1, 1),
+            ('iPhone  Cyan', 'iPhone 15 Cyan', 150, 180, 60, 150, 10, 10, 1, 2, 2),
         ]
 
         for dato in datos:
