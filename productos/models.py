@@ -1,13 +1,24 @@
 from django.db import models
 
+
+STATUS_CHOICES = (
+    (1, 'Entregado'),
+    (2, 'En Transito'),
+)
 class Inventario(models.Model):
     nombre = models.CharField(max_length=255)
     descripcion = models.CharField(max_length=255)
     stock = models.IntegerField()
+    stockl = models.IntegerField()
+    stockr = models.IntegerField()
     cantidad_maxima = models.IntegerField()
     cantidad_minima = models.IntegerField()
     venta_maxima = models.IntegerField()
     venta_minima = models.IntegerField()
+    BoM = models.IntegerField()
+    status = models.SmallIntegerField(choices=STATUS_CHOICES)
+
+
 
     def __str__(self):
         return self.nombre

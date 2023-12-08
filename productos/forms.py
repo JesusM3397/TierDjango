@@ -4,7 +4,7 @@ from .models import Inventario,Envio,Solicitud
 class InventarioForm(forms.ModelForm):
     class Meta:
         model = Inventario
-        fields = ['nombre', 'descripcion', 'stock', 'cantidad_maxima', 'cantidad_minima', 'venta_maxima', 'venta_minima']
+        fields = ['nombre', 'descripcion',  'stockl', 'stockr', 'cantidad_maxima', 'cantidad_minima', 'venta_maxima', 'venta_minima', 'BoM', 'status']
 class PlasticPartsForm(forms.Form):
     carcasa_color_azul = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))
     carcasa_color_verde = forms.IntegerField(initial=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 200, 'max': 1000}))

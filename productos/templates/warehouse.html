@@ -55,7 +55,7 @@
                     <span>Solicitudes</span>
                 </a>
             </li>
-            
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="/clientsell">
                     <i class="fas fa-fw fa-dollar-sign"></i>
@@ -66,7 +66,7 @@
             <div class="sidebar-heading">
                 Tier 2: Provedor de piezas Electronicas
             </div>
-            
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="/t2pesell">
                     <i class="fas fa-fw fa-store"></i>
@@ -76,7 +76,7 @@
             <div class="sidebar-heading">
                 Tier 2: Provedor de piezas plasticas cosmeticas
             </div>
-            
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="/t2pcsell">
                     <i class="fas fa-fw fa-store"></i>
@@ -95,7 +95,7 @@
 
             <!-- *********************************************************************************************  -->
 
-            
+
             <hr class="sidebar-divider">
         </ul>
         <div id="content-wrapper" class="d-flex flex-column">
@@ -112,10 +112,14 @@
                                     <th>Nombre</th>
                                     <th>Descripción</th>
                                     <th>Stock</th>
+                                    <th>Stockl</th>
+                                    <th>Stockr</th>
                                     <th>Cantidad Máxima</th>
                                     <th>Cantidad Mínima</th>
                                     <th>Venta Máxima</th>
                                     <th>Venta Mínima</th>
+                                    <th>BoM</th>
+                                    <th>Status</th>
                                     <th>Acciones</th>
                                 </tr>
                                 <tr>
@@ -125,42 +129,54 @@
                                         <td><input type="text" name="nombre" required></td>
                                         <td><input type="text" name="descripcion" required></td>
                                         <td><input type="number" name="stock" min="0" title="Debe ser un número mayor o igual a 0" required></td>
+                                        <td><input type="number" name="stockl" required></td>
+                                        <td><input type="number" name="stockr" required></td>
                                         <td><input type="number" name="cantidad_maxima" min="200" max="100000" title="Debe ser un número entre 200 y 100000" required></td>
                                         <td><input type="number" name="cantidad_minima" min="200" title="Debe ser un número arriba de 200" required></td>
                                         <td><input type="number" name="venta_maxima" min="200" max="100000" title="Debe ser un número entre 100 y 100000" required></td>
                                         <td><input type="number" name="venta_minima" min="200" m title="Debe ser un número arriba de 200" required></td>
+                                        <td><input type="number" name="BoM" required></td>
+                                        <td>
+                                            <select name="status" required>
+                                                <option value="1">Entregado</option>
+                                                <option value="2">En Transito</option>
+                                            </select>
+                                        </td>
                                         <td><button type="submit" class="btn btn-primary btn-sm">Agregar</button></td>
                                     </form>
-                                    
-                                    
-                                    
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for item in inventario %}
-                                <tr>
-                                    <td>{{ item.id }}</td>
-                                    <td>{{ item.nombre }}</td>
-                                    <td>{{ item.descripcion }}</td>
-                                    <td>{{ item.stock }}</td>
-                                    <td>{{ item.cantidad_maxima }}</td>
-                                    <td>{{ item.cantidad_minima }}</td>
-                                    <td>{{ item.venta_maxima }}</td>
-                                    <td>{{ item.venta_minima }}</td>
-                                    <td>
-                                        <form method="post" action="{% url 'editar-material' item.id %}">
-                                            {% csrf_token %}
-                                    <td><button type="submit" class="btn btn-warning btn-sm">Editar</button></td>
-                                    </form>
-                                    <form method="post" action="{% url 'delete-material' item.id %}">
-                                        {% csrf_token %}
-                                        <td><button type="submit" class="btn btn-danger btn-sm">Eliminar</button></td>
-                                    </form>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>{{ item.id }}</td>
+                                        <td>{{ item.nombre }}</td>
+                                        <td>{{ item.descripcion }}</td>
+                                        <td>{{ item.stock }}</td>
+                                        <td>{{ item.stockl }}</td>
+                                        <td>{{ item.stockr }}</td>
+                                        <td>{{ item.cantidad_maxima }}</td>
+                                        <td>{{ item.cantidad_minima }}</td>
+                                        <td>{{ item.venta_maxima }}</td>
+                                        <td>{{ item.venta_minima }}</td>
+                                        <td>{{ item.BoM }}</td>
+                                        <td>{{ item.get_status_display }}</td>
+                                        <td>
+                                            <form method="post" action="{% url 'editar-material' item.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-warning btn-sm">Editar</button>
+                                            </form>
+                                            <form method="post" action="{% url 'delete-material' item.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                                            </form>
+                                        </td>
+                                    </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
+                        
+
                     </div>
                 </div>
             </div>
