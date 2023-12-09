@@ -8,6 +8,7 @@ import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F
 import traceback
+from django.http import JsonResponse
 
 
 def index(request):
@@ -320,13 +321,12 @@ def log_ship(request):
     if request.method == "POST":
         form = EnvioForm(request.POST)
         if form.is_valid():
-            nuevo_envio = form.save()  # Guardar el formulario y obtener el objeto Envio
+            nuevo_envio = form.save()
             data = {
                 "origen": nuevo_envio.origen,
                 "destino": nuevo_envio.destino,
                 "fecha": nuevo_envio.fecha.strftime("%Y-%m-%d"),
                 "peso": nuevo_envio.peso,
-                # Agrega más campos según sea necesario
             }
             main_api_url = "http://localhost:8002/update-envios"
             response = requests.post(
@@ -405,3 +405,94 @@ def entryexit(request):
             "total_electronic_parts": total_electronic_parts,
         },
     )
+@csrf_exempt
+def alexa_contar_solicitudes(request):
+    if request.method == 'POST':
+        try:
+            # Puedes personalizar esto según la estructura específica de tu Intent
+            data = json.loads(request.body)
+
+            # Contar solicitudes y verificar el umbral
+            cantidad_solicitudes = Solicitud.objects.count()
+            umbral = 100
+
+            if cantidad_solicitudes > umbral:
+                response_text = f'¡Alerta! Hay más de {umbral} solicitudes pendientes.'
+            else:
+                response_text = f'Hay {cantidad_solicitudes} solicitudes en total.'
+
+            # Construir la respuesta en el formato de respuesta de Alexa
+            response = {
+                'version': '1.0',
+                'response': {
+                    'outputSpeech': {
+                        'type': 'PlainText',
+                        'text': response_text
+                    },
+                    'shouldEndSession': True
+                }
+            }
+
+            return JsonResponse(response)
+
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': 'Error decoding JSON data'}, status=400)
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+@csrf_exempt
+def alexa_consulta_inventario(request):
+    if request.method == 'POST':
+        try:
+            # Puedes personalizar esto según la estructura específica de tu Intent
+            data = json.loads(request.body)
+            producto = data.get('slots', {}).get('Producto', {}).get('value')
+
+            # Consulta el inventario para obtener la información del producto
+            inventario_producto = Inventario.objects.get(nombre=producto)
+
+            # Construir la respuesta en el formato de respuesta de Alexa
+            response = {
+                'version': '1.0',
+                'response': {
+                    'outputSpeech': {
+                        'type': 'PlainText',
+                        'text': f'Hay {inventario_producto.stock} unidades de {producto} en stock.'
+                    },
+                    'shouldEndSession': True
+                }
+            }
+
+            return JsonResponse(response)
+
+        except Inventario.DoesNotExist:
+            return JsonResponse({'error': 'Producto no encontrado en el inventario'}, status=404)
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': 'Error decoding JSON data'}, status=400)
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+@csrf_exempt
+def obtener_datos_envios_desde_ciudad(request, ciudad_origen):
+    if request.method == 'GET':
+        try:
+            # Obtener información sobre los envíos desde la ciudad de origen
+            envios_desde_ciudad = Envio.objects.filter(origen=ciudad_origen)
+            cantidad_envios = envios_desde_ciudad.count()
+
+            # Construir la respuesta en el formato de respuesta de Alexa
+            response = {
+                'version': '1.0',
+                'response': {
+                    'outputSpeech': {
+                        'type': 'PlainText',
+                        'text': f'Hay un total de {cantidad_envios} envíos realizados desde {ciudad_origen}.'
+                    },
+                    'shouldEndSession': True
+                }
+            }
+
+            return JsonResponse(response)
+
+        except Exception as e:
+            return JsonResponse({'error': f'Error: {str(e)}'}, status=500)
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
