@@ -1,5 +1,5 @@
 from django import forms
-from .models import Inventario,Envio,Solicitud,PlasticParts,ElectronicParts
+from .models import Inventario,Envio,Solicitud,PlasticParts,ElectronicParts, CITY_ORIGIN, CITY_DESTINY
 
 class InventarioForm(forms.ModelForm):
     class Meta:
@@ -40,8 +40,8 @@ class EnvioForm(forms.ModelForm):
         queryset=Solicitud.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-    origen = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    destino = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    origen = forms.ChoiceField(choices=CITY_ORIGIN, widget=forms.Select(attrs={'class': 'form-control'}))
+    destino = forms.ChoiceField(choices=CITY_DESTINY, widget=forms.Select(attrs={'class': 'form-control'}))
     fecha = forms.DateField(widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}))
     peso = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'min': 1}))
 
@@ -51,7 +51,7 @@ class EnvioForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EnvioForm, self).__init__(*args, **kwargs)
-        
+
         # Excluir IDs de solicitudes ya existentes
         solicitudes_exist = Envio.objects.values_list('solicitud__id', flat=True).distinct()
         self.fields['solicitud'].queryset = Solicitud.objects.exclude(id__in=solicitudes_exist)
