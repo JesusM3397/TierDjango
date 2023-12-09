@@ -13,7 +13,7 @@ urlpatterns = [
     path('delete-material/<int:material_id>/', views.delete_material, name='delete-material'),
     path('editar-material/<int:material_id>/', views.editar_material, name='editar-material'),
     path('entryexit/', views.entryexit, name='entryexit'),
-    path('/contar-solicitudes/', views.alexa_contar_solicitudes, name='alexa-contar-solicitudes'),
-    path('/consulta-inventario/', views.alexa_consulta_inventario, name='alexa-consulta-inventario'),
-    path('/obtener-datos-desde-ciudad/<str:ciudad_origen>/', views.obtener_datos_envios_desde_ciudad, name='obtener-datos-envios'),
+    path('contar-solicitudes/', views.alexa_contar_solicitudes, name='alexa-contar-solicitudes'),
+    path('consulta-inventario/', views.alexa_consulta_inventario, name='alexa-consulta-inventario'),
+    path('obtener-datos-desde-ciudad/<str:ciudad_origen>/', views.obtener_datos_envios_desde_ciudad, name='obtener-datos-envios'),
 ]
