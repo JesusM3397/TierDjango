@@ -52,7 +52,6 @@ def editar_material(request, material_id):
         form = InventarioForm(instance=material)
     return render(request, "editar_material.html", {"form": form, "material": material})
 
-
 @csrf_exempt
 def client_request(request):
     solicitudes = Solicitud.objects.all()
@@ -160,7 +159,9 @@ def client_request(request):
             inventario_11.stock = F("stock") - (total_nativo * multiplicacion_x2)
             inventario_11.save()
 
-            return HttpResponse(status=200)
+            # Devuelve una respuesta JSON al cliente con algún mensaje o datos adicionales
+            response_data = {"message": "Solictud en Preparacion",}
+            return JsonResponse(response_data, status=200)
 
         except json.JSONDecodeError as e:
             return HttpResponse("Error decoding JSON data", status=400)
