@@ -301,7 +301,7 @@ def t2pc_sell(request):
                 "carcasa_color_cyan": plastic_parts_data.carcasa_color_cyan,
             }
 
-            main_api_url = "http://localhost:8002/update-plastic-parts"
+            main_api_url = "https://tier2plasticos.azurewebsites.net/clientrequest/"
             response = requests.post(main_api_url, json=data)
 
             if response.status_code == 200:
